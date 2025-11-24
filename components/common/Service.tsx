@@ -25,7 +25,7 @@ export default function Services() {
 
     ];
   return (
-    <section className="w-full px-6 lg:px-20 mb-30">
+    <section id="services" className="w-full px-6 lg:px-20 mb-30">
       {/* Section Title */}
       <h2 className="text-center text-3xl md:text-4xl font-bold mb-16">
         Our Services / What We Offer

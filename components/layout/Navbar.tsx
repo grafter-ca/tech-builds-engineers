@@ -53,13 +53,13 @@ export default function Navbar() {
           <Link href="/">
             <li className="hover:text-blue-600 cursor-pointer">Home</li>
           </Link>
-          <Link href="/about">
+          <Link href="#about">
             <li className="hover:text-blue-600 cursor-pointer">About</li>
           </Link>
-          <Link href="/courses">
+          <Link href="#courses">
             <li className="hover:text-blue-600 cursor-pointer">Courses</li>
           </Link>
-          <Link href="/services">
+          <Link href="#services">
             <li className="hover:text-blue-600 cursor-pointer">Services</li>
           </Link>
           <Link href="/contact">
@@ -110,13 +110,13 @@ export default function Navbar() {
           <Link href="/">
             <li className="hover:text-blue-600 cursor-pointer">Home</li>
           </Link>
-          <Link href="/about">
+          <Link href="#about">
             <li className="hover:text-blue-600 cursor-pointer">About</li>
           </Link>
-          <Link href="/courses">
+          <Link href="#courses">
             <li className="hover:text-blue-600 cursor-pointer">Courses</li>
           </Link>
-          <Link href="/services">
+          <Link href="#services">
             <li className="hover:text-blue-600 cursor-pointer">Services</li>
           </Link>
           <Link href="/contact">

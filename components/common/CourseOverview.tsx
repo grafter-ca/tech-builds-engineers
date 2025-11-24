@@ -51,7 +51,7 @@ const courses = [
 
 export default function CoursesOverview() {
   return (
-    <section className="w-full pb-20 px-6 md:px-20">
+    <section id="courses" className="w-full pb-20 px-6 md:px-20">
       <h2 className="text-center text-3xl md:text-4xl font-bold mb-16">
         Courses Overview
       </h2>

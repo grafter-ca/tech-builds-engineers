@@ -6,9 +6,7 @@ import WhyChooseUs from "@/components/common/Why";
 import NavBar from "@/components/layout/Navbar";
 import CallToAction from "@/components/common/CallToAction";
 import Patern from "@/components/common/Patern";
-import GsapTest from "@/components/GsapTest";
-
-
+import Footer from "@/components/layout/Footer";
 
 
 export default function Home() {
@@ -22,7 +20,7 @@ export default function Home() {
       <WhyChooseUs />
       <CallToAction />
       <Patern />
-      <GsapTest />
+      <Footer />
      </section>
   );
 }

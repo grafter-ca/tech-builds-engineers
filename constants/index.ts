@@ -4,6 +4,12 @@ export const hero_image =
 '/img/Embeded-sys-logo-image.png',
 '/img/Solidworks-logo-image.png'
 ]
+export const patern_image = 
+[
+'/img/Rwanda-flag.png',
+'/img/solidworks-corp.png',
+'/img/UR-logo.png',
+]
 
 export const aboutItems = [
     {
@@ -30,4 +36,24 @@ export const aboutItems = [
       for the future.`,
     },
   ];
+
+  export const reasons = [
+        {
+            title: "Learn from Certified Professionals",
+            description: "Our trainers include CSWA/CSWP-certified designers, experienced embedded developers, and web engineers—ensuring high-quality mentorship and accurate guidance.",
+        },
+        {
+            title: "Hands-on Engineering Projects",
+            description: "Every learner builds real-world engineering projects, from CAD models to circuits and web applications, boosting practical confidence and technical skills.",
+        },
+        {
+            title: "Structured Certification Paths",
+            description: "We provide step-by-step SolidWorks learning roadmaps tailored for CSWA, CSWP, and CSWPA exams, including mock tests and personalized preparation.",
+        },
+        {
+            title: "Affordable & Accessible for All Students",
+            description: "We keep our training affordable so every engineering student can learn without financial barriers—while maintaining premium quality.",
+        },
+    ];
+
 

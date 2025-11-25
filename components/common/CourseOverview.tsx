@@ -2,47 +2,46 @@
 
 import React from "react";
 import { 
-  PiCubeThin,
   PiCubeFill,
   PiCpuThin,
   PiMonitorThin,
   PiCodeThin,
-  PiStackSimpleThin
 } from "react-icons/pi"; 
+import { Cuboid, Layers } from "lucide-react";
 
 const courses = [
   {
-    icon: <PiCubeThin size={55} className="text-clsblack" />,
+    icon: <Cuboid size={60} className="text-black" />,
     title: "SolidWorks Beginner Track",
     desc1: "Learn the fundamentals of 3D modeling, sketches, features, and assemblies.",
     desc2: "Perfect for students starting their journey into mechanical design.",
   },
   {
-    icon: <PiCubeFill size={55} className="text-black" />,
+    icon: <PiCubeFill size={60} className="text-black" />,
     title: "SolidWorks Professional Track",
     desc1: "Advanced modeling techniques, design strategies, complex assemblies, and",
     desc2: "exam-focused practice for CSWP certification.",
   },
   {
-    icon: <PiCpuThin size={55} className="text-black" />,
+    icon: <PiCpuThin size={60} className="text-black" />,
     title: "Arduino Starter Track",
     desc1: "Build your first electronic circuits, sensors, and automation projects using Arduino.",
     desc2: "No previous electronics experience needed.",
   },
   {
-    icon: <PiMonitorThin size={55} className="text-black" />,
+    icon: <PiMonitorThin size={60} className="text-black" />,
     title: "Embedded Projects",
     desc1: "Hands-on embedded systems projects involving sensors, communication modules,",
     desc2: "and real-world problem-solving. Perfect for project-based learning.",
   },
   {
-    icon: <PiCodeThin size={55} className="text-black" />,
+    icon: <PiCodeThin size={60} className="text-black" />,
     title: "Web Dev Basics for Engineers",
     desc1: "Learn HTML, CSS, JavaScript, and essential web concepts to build simple",
     desc2: "websites and engineering tools. No experience needed.",
   },
   {
-    icon: <PiStackSimpleThin size={55} className="text-black" />,
+    icon: <Layers size={60} className="text-black" />,
     title: "Engineering Career Path",
     desc1: "Guidance on certifications, portfolios, internships, and career strategies",
     desc2: "to prepare you for the engineering industry.",

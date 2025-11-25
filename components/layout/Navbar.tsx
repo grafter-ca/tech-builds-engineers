@@ -46,7 +46,9 @@ export default function Navbar() {
         className="w-full fixed top-0 left-0 z-50 bg-white shadow-md px-8 md:px-12 py-6 flex justify-between items-center"
       >
         {/* Logo */}
-        <div className="font-poppins text-3xl font-bold">Tech Build E.</div>
+       <Link href={"/"}>
+        <h1 className="font-manrope font-extrabold text-3xl">Tech Build E.</h1>
+        </Link>
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex gap-10 font-inter text-gray-700">
@@ -102,31 +104,33 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile Dropdown */}
-      <div
-        ref={mobileMenuRef}
-        className="md:hidden bg-white w-full shadow-md overflow-hidden h-0 opacity-0 fixed top-[72px] left-0 z-40"
-      >
-        <ul className="hidden md:flex gap-10 font-inter text-gray-700">
-          <Link href="/">
-            <li className="hover:text-blue-600 cursor-pointer">Home</li>
-          </Link>
-          <Link href="#about">
-            <li className="hover:text-blue-600 cursor-pointer">About</li>
-          </Link>
-          <Link href="#courses">
-            <li className="hover:text-blue-600 cursor-pointer">Courses</li>
-          </Link>
-          <Link href="#services">
-            <li className="hover:text-blue-600 cursor-pointer">Services</li>
-          </Link>
-          <Link href="/contact">
-            <li className="hover:text-blue-600 cursor-pointer">Contact</li>
-          </Link>
-          <button className="bg-blue-500 text-white w-48 px-5 py-2 rounded-lg font-poppins shadow hover:bg-blue-700 transition">
-            Join ETB
-          </button>
-        </ul>
-      </div>
+<div
+  ref={mobileMenuRef}
+  className="md:hidden bg-white w-full shadow-md overflow-hidden h-0 opacity-0 fixed top-[72px] left-0 z-40"
+>
+  <ul className="flex flex-col gap-6 font-inter text-gray-700 p-6">
+    <Link href="/">
+      <li className="hover:text-blue-600 cursor-pointer">Home</li>
+    </Link>
+    <Link href="#about">
+      <li className="hover:text-blue-600 cursor-pointer">About</li>
+    </Link>
+    <Link href="#courses">
+      <li className="hover:text-blue-600 cursor-pointer">Courses</li>
+    </Link>
+    <Link href="#services">
+      <li className="hover:text-blue-600 cursor-pointer">Services</li>
+    </Link>
+    <Link href="/contact">
+      <li className="hover:text-blue-600 cursor-pointer">Contact</li>
+    </Link>
+
+    <button className="bg-blue-500 text-white w-full px-5 py-2 rounded-lg font-poppins shadow hover:bg-blue-700 transition">
+      Join ETB
+    </button>
+  </ul>
+</div>
+
     </>
   );
 }

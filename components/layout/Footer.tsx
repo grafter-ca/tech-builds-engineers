@@ -166,35 +166,43 @@ useEffect(() => {
           <div className="flex items-center gap-3 mt-6" ref={iconsRef}>
   {/* social media links */}
   <Link href="https://www.youtube.com/@TechBuildsEngineer" target="_blank">
-    <FaYoutube className="social-icon" size={24} />
+    <FaYoutube className="social-icon text-blue-600 hover:text-blue-800 cursor-pointer transition-colors duration-200"
+ size={24} />
   </Link>
 
   <Link href="https://www.facebook.com/TechBuildsEngineer" target="_blank">
-    <FaFacebook className="social-icon" size={24} />
+    <FaFacebook className="social-icon text-blue-600 hover:text-blue-800 cursor-pointer transition-colors duration-200"
+ size={24} />
   </Link>
 
   <Link href="https://www.xTwitter.com/TechBuildsEngineer" target="_blank">
-    <FaXTwitter className="social-icon" size={24} />
+    <FaXTwitter className="social-icon text-blue-600 hover:text-blue-800 cursor-pointer transition-colors duration-200"
+ size={24} />
   </Link>
 
   <Link href="https://www.instagram.com/TechBuildsEngineer" target="_blank">
-    <FaInstagram className="social-icon" size={24} />
+    <FaInstagram className="social-icon text-blue-600 hover:text-blue-800 cursor-pointer transition-colors duration-200"
+ size={24} />
   </Link>
 
   <Link href="https://www.linkedin.com/TechBuildsEngineer" target="_blank">
-    <FaLinkedin className="social-icon" size={24} />
+    <FaLinkedin className="social-icon text-blue-600 hover:text-blue-800 cursor-pointer transition-colors duration-200"
+ size={24} />
   </Link>
 
   <Link href="https://www.github.com/TechBuildsEngineer" target="_blank">
-    <FaGithub className="social-icon" size={24} />
+    <FaGithub className="social-icon text-blue-600 hover:text-blue-800 cursor-pointer transition-colors duration-200"
+ size={24} />
   </Link>
 </div>
 
         </section>
       </article>
     </section>
-    <section className="inline-block justify-center lg:flex gap-2 border-t items-center lg:items-baseline border-gray-300 px-12 lg:px-20 py-8">
+    <section className="inline-block justify-center lg:flex lg:space-x-2 space-y-2 border-t items-center lg:items-baseline border-gray-300 px-12 lg:px-20 py-8">
+        <Link href={"/"}>
         <h1 className="font-manrope font-extrabold text-3xl">Tech Build E.</h1>
+        </Link>
         <p className="font-inter font-medium">&copy;2025 Engineering Tech Builds Club.All Rights Reserved.</p>
     </section>
     </>

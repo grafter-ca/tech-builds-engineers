@@ -1,11 +1,99 @@
-import { CourseItem, ServiceItem } from "@/types";
+import { CourseItem, Instructor, ServiceItem, TeamMember } from "@/types";
 import { Code, Cpu, Cuboid } from "lucide-react";
 import { PiCubeFill, PiCpuThin, PiMonitorThin, PiCodeThin } from "react-icons/pi";
 import { Layers } from "lucide-react";
-import { FaF, FaLinkedin, FaXTwitter, FaYoutube } from "react-icons/fa6";
+import {  FaLinkedin, FaXTwitter, FaYoutube } from "react-icons/fa6";
 import { FaFacebook, FaGithub, FaInstagram } from "react-icons/fa";
 
 import { FooterInformationsType } from "@/types";
+
+// src/data/team.ts
+
+
+/* ------------------------------------------
+   🚀 INSTRUCTORS LIST (Used for Courses Page)
+------------------------------------------- */
+export const InstructorList: Instructor[] = [
+  {
+    id: 1,
+    name: "Caleb Habyarimana",
+    role: "Lead Mechanical Design Instructor",
+    specialization: "SolidWorks • CAD • FEA",
+    experience: "4+ Years",
+    image: "/images/instructors/caleb.jpg",
+    bio: "Caleb is a Certified SolidWorks Professional (CSWP) with hands-on experience in CAD modelling, FEA simulations, and mechanical design for manufacturing.",
+    courses: ["SolidWorks Essentials", "Advanced CAD Modeling", "FEA with SolidWorks"]
+  },
+  {
+    id: 2,
+    name: "Alice Kamikazi",
+    role: "Embedded Systems Instructor",
+    specialization: "Arduino • PCB Design • IoT",
+    experience: "3+ Years",
+    image: "/images/instructors/alice.jpg",
+    bio: "Alice specializes in microcontroller-based systems, IoT solutions, and hands-on hardware prototyping for engineering learners.",
+    courses: ["Arduino for Beginners", "IoT with ESP32", "Advanced Embedded Systems"]
+  },
+  {
+    id: 3,
+    name: "Eric Ndayishimiye",
+    role: "Software Development Instructor",
+    specialization: "JavaScript • React • Backend",
+    experience: "5+ Years",
+    image: "/images/instructors/eric.jpg",
+    bio: "Eric is a full-stack engineer passionate about teaching clean code, scalable software development, and modern web technologies.",
+    courses: ["JavaScript Mastery", "React From Zero to Hero", "Node.js Backend Development"]
+  }
+];
+
+/* ------------------------------------------
+    👨‍💼 TEAM MEMBERS (For About Us Page)
+------------------------------------------- */
+export const TeamMembers: TeamMember[] = [
+  {
+    id: 1,
+    name: "Caleb Habyarimana",
+    position: "Club President & Lead Engineer",
+    image: "/img/team.webp",
+    intro: "Leads ETB with a strong focus on engineering education, design thinking, and technology innovation.",
+    socials: {
+      linkedin: "https://linkedin.com/in/caleb-habyarimana",
+      github: "https://github.com/calebabyarimana"
+    }
+  },
+  {
+    id: 2,
+    name: "Nadine Uwase",
+    position: "Project Coordinator",
+    image: "/img/team.webp",
+    intro: "Responsible for coordinating student projects, events, and collaborations within ETB.",
+    socials: {
+      linkedin: "https://linkedin.com/in/nadine"
+    }
+  },
+  {
+    id: 3,
+    name: "Samuel Mugisha",
+    position: "Technical Mentor - Electronics",
+    image: "/img/team.webp",
+    intro: "Provides mentorship in Arduino, IoT, sensors, and electronics prototyping.",
+    socials: {
+      linkedin: "https://linkedin.com/in/samuel",
+      twitter: "https://twitter.com/samuel"
+    }
+  },
+  {
+    id: 4,
+    name: "Claudine Ingabire",
+    position: "UI/UX & Learning Experience Designer",
+    image: "/img/team.webp",
+    intro: "Designs user-friendly learning interfaces and improves student engagement.",
+    socials: {
+      linkedin: "https://linkedin.com/in/claudine"
+    }
+  }
+];
+
 
 export const hero_image = 
 [
@@ -48,7 +136,7 @@ export const aboutItems = [
 
 export const NavLink = [
     { name: "Home", href: "/" },
-    { name: "About", href: "#about" },
+    { name: "About", href: "/about"},
     { name: "Courses", href: "/courses" },
     { name: "Services", href: "/services" },
     { name: "Contact", href: "#contact" },
@@ -479,10 +567,10 @@ export const FooterInformations : FooterInformationsType[] = [
     title: "Quick Links",
     links: [
       { name: "Home", href: "/" },
-      { name: "Services", href: "#services" },
-      { name: "Courses", href: "#courses" },
-      { name: "About Us", href: "#about" },
-      { name: "Contact", href: "/contact" },
+      { name: "Services", href: "/services" },
+      { name: "Courses", href: "/courses" },
+      { name: "About Us", href: "/about" },
+      { name: "Contact", href: "#contact" },
     ],
   },
 

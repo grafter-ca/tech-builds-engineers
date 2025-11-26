@@ -36,3 +36,27 @@ export interface FooterInformationsType {
   };
   socials?: { name: string; url: string; icon: React.ComponentType, }[];
 }
+
+export interface Instructor {
+  id: number;
+  name: string;
+  role: string;
+  specialization: string;
+  experience: string;
+  image: string;
+  bio: string;
+  courses: string[];
+}
+
+export interface TeamMember {
+  id: number;
+  name: string;
+  position: string;
+  image: string;
+  intro: string;
+  socials: {
+    linkedin?: string;
+    twitter?: string;
+    github?: string;
+  };
+}

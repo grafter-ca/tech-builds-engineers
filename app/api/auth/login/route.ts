@@ -1,29 +1,66 @@
-// app/api/auth/login/route.ts
-import pool from "@/lib/db";
-import { verifyPassword, generateToken } from "@/lib/auth";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { verifyPassword } from "@/lib/auth";
+import { z } from "zod";
+import jwt from "jsonwebtoken";
 
-export async function POST(req: Request) {
+const loginSchema = z.object({
+  email: z.string().email("Invalid email"),
+  password: z.string().min(1, "Password required"),
+});
+
+const JWT_SECRET = process.env.JWT_SECRET || "your-super-secret-key-change-this-1234567890";
+
+export async function POST(req: NextRequest) {
   try {
-    const { email, password } = await req.json();
-    if (!email || !password) return NextResponse.json({ error: "Missing" }, { status: 400 });
+    const body = await req.json();
+    const { email, password } = loginSchema.parse(body);
 
-    const res = await pool.query("SELECT id, name, email, password, role FROM users WHERE email=$1", [email]);
-    const user = res.rows[0];
-    if (!user) return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+    const user = await prisma.user.findUnique({
+      where: { email },
+      include: { member: true },
+    });
 
-    const valid = await verifyPassword(password, user.password);
-    if (!valid) return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+    if (!user || !(await verifyPassword(password, user.passwordHash))) {
+      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+    }
 
-    const token = generateToken({ userId: user.id, role: user.role });
+    if (user.accountStatus !== "active") {
+      return NextResponse.json({ error: "Account not active yet" }, { status: 403 });
+    }
 
-    //set cookie (uncomment to use)
-    const response = NextResponse.json({ user });
-    response.cookies.set("token", token, { httpOnly: true, path: "/", maxAge: 60*60*24*7 });
-    //return token in response (client stores it)
-    return NextResponse.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
-  } catch (err: any) {
-    console.error(err);
+    // JWT with BigInt converted
+    const token = jwt.sign(
+      {
+        userId: Number(user.user_id),
+        email: user.email,
+        role: user.role,
+      },
+      JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    return NextResponse.json({
+      message: "Login successful",
+      user: {
+        userId: Number(user.user_id),
+        email: user.email,
+        fullName: user.fullName,
+        role: user.role,
+        membershipStatus: user.member?.membershipStatus || null,
+      },
+    },
+  
+    { status: 200,
+      headers: {
+        "Set-Cookie": `token=${token}; HttpOnly; Path=/; Max-Age=${7 * 24 * 60 * 60}; SameSite=Strict`,
+      },
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ error: "Invalid input", details: error.message }, { status: 400 });
+    }
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

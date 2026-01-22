@@ -1,0 +1,349 @@
+generator client {
+  provider = "prisma-client-js"
+  // no output line needed
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")   // ← this is REQUIRED in Prisma 6.x
+}
+
+//__________________________________________________
+// model
+//__________________________________________________
+
+// ─────────────────────────────────────────────────────────────
+// USER (core authentication & profile)
+// ─────────────────────────────────────────────────────────────
+model User {
+  user_id BigInt @id @default(autoincrement())
+  email String @unique @db.Citext
+  passwordHash String
+  fullName String
+  firstName String?
+  lastName String?
+  studentId String? @unique
+  department String?
+  yearOfStudy String?
+  accountStatus AccountStatus @default(pending)
+  role UserRole @default(member)
+  isActive Boolean @default(true)
+  isVerified Boolean @default(false)
+  profilePictureUrl String?
+  githubUsername String?
+  linkedinUrl String?
+  bio String?
+  lastLogin DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations (opposite side)
+  member               Member?
+  createdProjects      Project[]
+  projectMemberships   ProjectMember[]
+  organizedEvents      Event[]
+  eventParticipations  EventParticipant[]
+  payments             Payment[]
+  announcements        Announcement[]
+  responsibleInventory InventoryItem[]
+  inventoryLoans       InventoryLoan[]
+  approvedLoans        InventoryLoan[] @relation("ApprovedBy")
+  
+  // Fixed relation: a user can lead many cohorts
+  leadingCohorts       Cohort[]       // ← this stays
+  
+  cohortMemberships    CohortMember[]
+  feedbackGiven        Feedback[]
+  resetTokens          PasswordResetToken[]
+  verificationToken    EmailVerificationToken?
+}
+
+// ─────────────────────────────────────────────────────────────
+// MEMBER (extended club info)
+// ─────────────────────────────────────────────────────────────
+model Member {
+  member_id          BigInt     @id @default(autoincrement())
+  userId             BigInt     @unique
+  joinDate           DateTime   @default(now())
+  membershipStatus   MembershipStatus @default(pending)
+  skills             String[]
+  interests          String[]
+  points             Int        @default(0)
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+
+  user               User       @relation(fields: [userId], references: [user_id])
+}
+
+// ─────────────────────────────────────────────────────────────
+// PROJECT (core of builders club)
+// ─────────────────────────────────────────────────────────────
+model Project {
+  project_id         BigInt      @id @default(autoincrement())
+  title              String
+  slug               String      @unique
+  description        String?
+  status             ProjectStatus @default(idea)
+  startDate          DateTime?
+  endDate            DateTime?
+  githubUrl          String?
+  demoUrl            String?
+  presentationUrl    String?
+  coverImageUrl      String?
+  createdById        BigInt
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+
+  createdBy          User        @relation(fields: [createdById], references: [user_id])
+  members            ProjectMember[]
+}
+
+// ─────────────────────────────────────────────────────────────
+// PROJECT_MEMBER (team membership)
+// ─────────────────────────────────────────────────────────────
+model ProjectMember {
+  projectId          BigInt
+  userId             BigInt
+  role               String
+  joinedAt           DateTime   @default(now())
+
+  project            Project    @relation(fields: [projectId], references: [project_id])
+  user               User       @relation(fields: [userId], references: [user_id])
+
+  @@id([projectId, userId])
+}
+
+// ─────────────────────────────────────────────────────────────
+// EVENT (workshops, hackathons, meetups)
+// ─────────────────────────────────────────────────────────────
+model Event {
+  event_id           BigInt      @id @default(autoincrement())
+  title              String
+  slug               String      @unique
+  description        String?
+  eventType          String?
+  startDatetime      DateTime
+  endDatetime        DateTime?
+  location           String?
+  isOnline           Boolean     @default(false)
+  meetLink           String?
+  organizerId        BigInt
+  maxParticipants    Int?
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+
+  organizer          User        @relation(fields: [organizerId], references: [user_id])
+  participants       EventParticipant[]
+}
+
+// ─────────────────────────────────────────────────────────────
+// EVENT_PARTICIPANT (registration & attendance)
+// ─────────────────────────────────────────────────────────────
+model EventParticipant {
+  eventId            BigInt
+  userId             BigInt
+  registeredAt       DateTime   @default(now())
+  attended           Boolean    @default(false)
+  feedback           String?
+
+  event              Event      @relation(fields: [eventId], references: [event_id])
+  user               User       @relation(fields: [userId], references: [user_id])
+
+  @@id([eventId, userId])
+}
+
+// ─────────────────────────────────────────────────────────────
+// PAYMENT (MTN MoMo Collections)
+// ─────────────────────────────────────────────────────────────
+model Payment {
+  payment_id         BigInt      @id @default(autoincrement())
+  userId             BigInt?
+  purposeType        String
+  relatedEntityId    BigInt?
+  amount             Float
+  currency           String      @default("RWF")
+  momoTransactionId  String?     @unique
+  paymentStatus      PaymentStatus @default(pending)
+  payerPhone         String?
+  transactionDate    DateTime?
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+
+  user               User?       @relation(fields: [userId], references: [user_id])
+}
+
+// ─────────────────────────────────────────────────────────────
+// ANNOUNCEMENT
+// ─────────────────────────────────────────────────────────────
+model Announcement {
+  announcement_id    BigInt      @id @default(autoincrement())
+  title              String
+  content            String
+  authorId           BigInt
+  isPinned           Boolean     @default(false)
+  priority           String      @default("normal")
+  publishDate        DateTime    @default(now())
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+
+  author             User        @relation(fields: [authorId], references: [user_id])
+}
+
+// ─────────────────────────────────────────────────────────────
+// INVENTORY & LOANS
+// ─────────────────────────────────────────────────────────────
+model InventoryItem {
+  item_id            BigInt      @id @default(autoincrement())
+  name               String
+  description        String?
+  category           String
+  sku                String?     @unique
+  totalQuantity      Int         @default(0)
+  availableQuantity  Int         @default(0)
+  minStockLevel      Int         @default(0)
+  status             InventoryStatus @default(available)
+  responsibleUserId  BigInt?
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+
+  responsibleUser    User?       @relation(fields: [responsibleUserId], references: [user_id])
+  loans              InventoryLoan[]
+}
+
+model InventoryLoan {
+  loan_id            BigInt      @id @default(autoincrement())
+  itemId             BigInt
+  userId             BigInt
+  borrowedAt         DateTime    @default(now())
+  dueDate            DateTime
+  returnedAt         DateTime?
+  quantityBorrowed   Int         @default(1)
+  approvedById       BigInt?
+
+  item               InventoryItem @relation(fields: [itemId], references: [item_id])
+  user               User        @relation(fields: [userId], references: [user_id])
+  approvedBy         User?       @relation("ApprovedBy", fields: [approvedById], references: [user_id])
+}
+
+// ─────────────────────────────────────────────────────────────
+// COHORT & COHORT_MEMBER
+// ─────────────────────────────────────────────────────────────
+model Cohort {
+  cohort_id   BigInt   @id @default(autoincrement())
+  name        String
+  year        Int
+  description String?
+  startDate   DateTime?
+  endDate     DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Fixed: opposite relation field
+  leadId      BigInt?
+  lead        User?    @relation(fields: [leadId], references: [user_id])
+
+  members     CohortMember[]
+}
+
+model CohortMember {
+  cohortId BigInt
+  userId   BigInt
+
+  joinedAt DateTime @default(now())
+
+  cohort   Cohort @relation(fields: [cohortId], references: [cohort_id], onDelete: Cascade)
+  user     User   @relation(fields: [userId], references: [user_id], onDelete: Cascade)
+
+  @@id([cohortId, userId])
+}
+
+// ─────────────────────────────────────────────────────────────
+// FEEDBACK
+// ─────────────────────────────────────────────────────────────
+model Feedback {
+  feedback_id        BigInt      @id @default(autoincrement())
+  userId             BigInt
+  entityType         String
+  entityId           BigInt?
+  rating             Int?
+  comment            String?
+  isAnonymous        Boolean     @default(false)
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+
+  user               User        @relation(fields: [userId], references: [user_id])
+}
+
+model PasswordResetToken {
+  id          BigInt    @id @default(autoincrement())
+  userId      BigInt
+  token       String    @unique   // hashed or random UUID
+  expiresAt   DateTime
+  createdAt   DateTime  @default(now())
+  used        Boolean   @default(false)
+
+  user        User      @relation(fields: [userId], references: [user_id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([expiresAt])
+}
+
+model EmailVerificationToken {
+  id          BigInt    @id @default(autoincrement())
+  userId      BigInt    @unique
+  token       String    @unique
+  expiresAt   DateTime
+  createdAt   DateTime  @default(now())
+
+  user        User      @relation(fields: [userId], references: [user_id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([expiresAt])
+}
+
+
+// enums
+
+enum MembershipStatus {
+  pending
+  active
+  suspended
+  rejected
+  expired
+}
+
+enum AccountStatus {
+  pending
+  active
+  suspended
+  banned
+}
+
+enum UserRole {
+  member
+  coordinator
+  admin
+  mentor
+}
+
+enum ProjectStatus {
+  idea
+  in_progress
+  completed
+  archived
+}
+
+enum PaymentStatus {
+  pending
+  success
+  failed
+  refunded
+}
+
+enum InventoryStatus {
+  available
+  borrowed
+  maintenance
+  broken
+  lost
+}

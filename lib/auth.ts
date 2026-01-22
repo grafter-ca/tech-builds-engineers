@@ -1,25 +1,25 @@
-// lib/auth.ts
+// src/lib/auth.ts
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import { prisma } from "./prisma";
 
-const JWT_SECRET = process.env.JWT_SECRET || "replace_me";
-
-export async function hashPassword(password: string) {
-  return await bcrypt.hash(password, 10);
+export async function hashPassword(password: string): Promise<string> {
+  return bcrypt.hash(password, 12);
 }
 
-export async function verifyPassword(password: string, hash: string) {
-  return await bcrypt.compare(password, hash);
+export async function verifyPassword(
+  plainPassword: string,
+  hashedPassword: string
+): Promise<boolean> {
+  return bcrypt.compare(plainPassword, hashedPassword);
 }
 
-export function generateToken(payload: object) {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
-}
-
-export function verifyToken(token: string) {
-  try {
-    return jwt.verify(token, JWT_SECRET);
-  } catch (e) {
-    return null;
-  }
+// ───────────────────────────────────────────────
+// Very simple check if email already exists
+// ───────────────────────────────────────────────
+export async function emailExists(email: string): Promise<boolean> {
+  const user = await prisma.user.findUnique({
+    where: { email },
+    select: { user_id: true },
+  });
+  return !!user;
 }

@@ -8,7 +8,7 @@ export default function NotFound() {
   useEffect(() => {
     gsap.from(".not-title", { opacity: 0, y: -20, duration: 0.6 });
     gsap.from(".not-text", { opacity: 0, y: 20, duration: 0.6, delay: 0.2 });
-    gsap.from(".not-btn", { opacity: 0, scale: 0.8, duration: 0.6, delay: 0.4 });
+    gsap.from(".not-btn", { opacity: 1, scale: 0.8, duration: 0.6, delay: 0.4 });
   }, []);
 
   return (

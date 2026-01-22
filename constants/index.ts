@@ -4,12 +4,7 @@ import { PiCubeFill, PiCpuThin, PiMonitorThin, PiCodeThin } from "react-icons/pi
 import { Layers } from "lucide-react";
 import {  FaLinkedin, FaXTwitter, FaYoutube } from "react-icons/fa6";
 import { FaFacebook, FaGithub, FaInstagram } from "react-icons/fa";
-
 import { FooterInformationsType } from "@/types";
-
-// src/data/team.ts
-
-
 /* ------------------------------------------
    🚀 INSTRUCTORS LIST (Used for Courses Page)
 ------------------------------------------- */
@@ -45,7 +40,6 @@ export const InstructorList: Instructor[] = [
     courses: ["JavaScript Mastery", "React From Zero to Hero", "Node.js Backend Development"]
   }
 ];
-
 /* ------------------------------------------
     👨‍💼 TEAM MEMBERS (For About Us Page)
 ------------------------------------------- */
@@ -63,51 +57,51 @@ export const TeamMembers: TeamMember[] = [
   },
   {
     id: 2,
-    name: "Nadine Uwase",
-    position: "Project Coordinator",
+    name: "Caleb Habyarimana",
+    position: "Club President & Lead Engineer",
     image: "/img/team.webp",
-    intro: "Responsible for coordinating student projects, events, and collaborations within ETB.",
+    intro: "Leads ETB with a strong focus on engineering education, design thinking, and technology innovation.",
     socials: {
-      linkedin: "https://linkedin.com/in/nadine"
+      linkedin: "https://linkedin.com/in/caleb-habyarimana",
+      github: "https://github.com/calebabyarimana"
     }
   },
   {
     id: 3,
-    name: "Samuel Mugisha",
-    position: "Technical Mentor - Electronics",
+    name: "Caleb Habyarimana",
+    position: "Club President & Lead Engineer",
     image: "/img/team.webp",
-    intro: "Provides mentorship in Arduino, IoT, sensors, and electronics prototyping.",
+    intro: "Leads ETB with a strong focus on engineering education, design thinking, and technology innovation.",
     socials: {
-      linkedin: "https://linkedin.com/in/samuel",
-      twitter: "https://twitter.com/samuel"
+      linkedin: "https://linkedin.com/in/caleb-habyarimana",
+      github: "https://github.com/calebabyarimana"
     }
   },
   {
     id: 4,
-    name: "Claudine Ingabire",
-    position: "UI/UX & Learning Experience Designer",
+    name: "Caleb Habyarimana",
+    position: "Club President & Lead Engineer",
     image: "/img/team.webp",
-    intro: "Designs user-friendly learning interfaces and improves student engagement.",
+    intro: "Leads ETB with a strong focus on engineering education, design thinking, and technology innovation.",
     socials: {
-      linkedin: "https://linkedin.com/in/claudine"
+      linkedin: "https://linkedin.com/in/caleb-habyarimana",
+      github: "https://github.com/calebabyarimana"
     }
-  }
+  },
+  
 ];
-
-
 export const hero_image = 
 [
 '/img/Dev-logo-image.png',
 '/img/Embeded-sys-logo-image.png',
 '/img/Solidworks-logo-image.png'
-]
+];
 export const patern_image = 
 [
 '/img/Rwanda-flag.png',
 '/img/solidworks-corp.png',
 '/img/UR-logo.png',
-]
-
+];
 export const aboutItems = [
     {
       title: "Who We Are",
@@ -133,7 +127,6 @@ export const aboutItems = [
       for the future.`,
     },
   ];
-
 export const NavLink = [
     { name: "Home", href: "/" },
     { name: "About", href: "/about"},
@@ -141,7 +134,6 @@ export const NavLink = [
     { name: "Services", href: "/services" },
     { name: "Contact", href: "#contact" },
   ];
-
   export const reasons = [
         {
             title: "Learn from Certified Professionals",
@@ -160,7 +152,6 @@ export const NavLink = [
             description: "We keep our training affordable so every engineering student can learn without financial barriers—while maintaining premium quality.",
         },
     ];
-
 export const services: ServiceItem[] = [
   {
     slug: "cad-mechanical",
@@ -288,9 +279,6 @@ export const services: ServiceItem[] = [
     ],
   },
 ];
-
-
-
 export const courses: CourseItem[] = [
   {
     slug: "solidworks-beginner",
@@ -552,8 +540,6 @@ export const courses: CourseItem[] = [
     ],
   },
 ];
-
-
 export const FooterInformations : FooterInformationsType[] = [
   {
     title: "About",
@@ -603,5 +589,28 @@ export const FooterInformations : FooterInformationsType[] = [
   },
 ];
 
+// Links organized by user type
+export const publicLinks = [
+  { name: "Home", href: "/" },
+  { name: "About the Club", href: "/about" },
+  { name: "Projects Showcase", href: "/projects" },
+  { name: "Events & Workshops", href: "/events" },
+  { name: "Announcements", href: "/announcements" },
+];
 
+export const memberLinks = [
+  { name: "Dashboard", href: "/dashboard" },
+  { name: "My Projects", href: "/projects/my" },
+  { name: "Events", href: "/events" },
+  { name: "Inventory & Tools", href: "/inventory" },
+  { name: "Announcements", href: "/announcements" },
+  { name: "Feedback", href: "/feedback" },
+  { name: "Profile", href: "/profile" },
+];
 
+export const adminLinks = [
+  { name: "Admin Panel", href: "/admin" },
+  { name: "Manage Members", href: "/admin/members" },
+  { name: "Payments", href: "/admin/payments" },
+  { name: "Cohorts", href: "/admin/cohorts" },
+];

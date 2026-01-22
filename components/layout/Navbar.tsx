@@ -3,119 +3,182 @@
 import React, { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import Link from "next/link";
-import { NavLink } from "@/constants";
+import { useRouter } from "next/navigation";
+import { Loader2, LogOut } from "lucide-react";
+
+import {publicLinks,memberLinks,adminLinks} from '@/constants'
+
+// ───────────────────────────────────────────────
+// Auth hook (using your localStorage token)
+const useAuth = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [role, setRole] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        setIsAuthenticated(true);
+        setRole(payload.role || "member");
+      } catch {
+        localStorage.removeItem("token");
+      }
+    }
+    setLoading(false);
+  }, []);
+
+  return { isAuthenticated, role, loading };
+};
 
 export default function Navbar() {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const navRef = useRef(null);
-  const mobileMenuRef = useRef(null);
+  const { isAuthenticated, role, loading } = useAuth();
+  const router = useRouter();
 
-  // GSAP Animation on load
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+
+  // GSAP fade-in (no flash)
   useEffect(() => {
-    gsap.from(navRef.current, {
-      opacity: 0,
-      y: -40,
-      duration: 0.8,
-      ease: "power3.out",
-    });
+    if (navRef.current) {
+      gsap.fromTo(
+        navRef.current,
+        { opacity: 0, y: -40 },
+        { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
+      );
+    }
   }, []);
 
   // GSAP mobile menu animation
   useEffect(() => {
-    if (mobileOpen) {
+    if (mobileMenuRef.current) {
       gsap.to(mobileMenuRef.current, {
-        height: "auto",
-        opacity: 1,
+        height: mobileOpen ? "auto" : 0,
+        opacity: mobileOpen ? 1 : 0,
         duration: 0.5,
-        ease: "power2.out",
-      });
-    } else {
-      gsap.to(mobileMenuRef.current, {
-        height: 0,
-        opacity: 0,
-        duration: 0.4,
-        ease: "power2.in",
+        ease: mobileOpen ? "power2.out" : "power2.in",
       });
     }
   }, [mobileOpen]);
 
+  // Dynamic links
+  let links = publicLinks;
+  if (isAuthenticated) {
+    links = [...memberLinks];
+    if (role === "admin" || role === "coordinator") {
+      links = [...links, ...adminLinks];
+    }
+  }
+
+  // Logout handler
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    router.push("/auth/login");
+    setMobileOpen(false);
+  };
   return (
     <>
       {/* Sticky Navbar */}
       <nav
         ref={navRef}
-        className="w-full fixed top-0 left-0 z-50 bg-white shadow-md px-8 md:px-12 py-6 flex justify-between items-center"
+        className="fixed top-0 left-0 w-full z-50 bg-base-100 shadow-md border-b border-base-200 px-6 md:px-12 py-4 flex justify-between items-center"
       >
         {/* Logo */}
-        <Link href={"/"}>
-          <h1 className="font-manrope font-extrabold text-3xl">
-            Tech Build E.
+        <Link href="/" className="flex gap-1 flex-col">
+          <div className="avatar placeholder">
+            <div className="bg-primary text-neutral-content rounded-lg w-12 p-1 flex items-center justify-center">
+              <span className="text-xl font-bold text-white">ETB</span>
+            </div>
+          </div>
+          <h1 className="font-extrabold text-xl md:text-2xl text-primary">
+            Engineering Tech Builders Club
           </h1>
         </Link>
 
         {/* Desktop Menu */}
-        <ul className="hidden md:flex gap-10 font-inter text-gray-700">
-          {NavLink.map((link, index) => (
-            <Link href={link.href} key={index}>
-              <li className="hover:text-blue-600 cursor-pointer">
+        <ul className="hidden md:flex items-center gap-8 text-base-content font-medium">
+          {links.map((link) => (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                className="hover:text-primary transition-colors duration-200"
+                onClick={link.name === "Logout" ? handleLogout : undefined}
+              >
                 {link.name}
-              </li>
-            </Link>
+              </Link>
+            </li>
           ))}
         </ul>
 
-        {/* Desktop Button */}
-        <button className="hidden md:block bg-blue-500 cursor-pointer text-white px-6 py-2 rounded-lg font-poppins shadow hover:bg-blue-700 transition">
-          Join ETB
-        </button>
+        {/* Desktop CTA / Logout */}
+        <div className="hidden md:flex items-center gap-4">
+          {!isAuthenticated ? (
+            <Link href="/auth/register">
+              <button className="btn btn-primary btn-sm rounded-full px-6">
+                Join the Club
+              </button>
+            </Link>
+          ) : (
+            <button
+              onClick={handleLogout}
+              className="btn btn-outline btn-sm gap-2"
+            >
+              <LogOut size={16} />
+              Logout
+            </button>
+          )}
+        </div>
 
-        {/* Mobile Icon */}
+        {/* Mobile Toggle */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden"
+          className="md:hidden btn btn-ghost btn-circle"
         >
-          <svg
-            className="w-8 h-8 text-gray-800"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-          >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             {mobileOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             )}
           </svg>
         </button>
       </nav>
-      {/* Mobile Dropdown */}
+
+      {/* Mobile Menu Dropdown */}
       <div
         ref={mobileMenuRef}
-        className="md:hidden bg-white w-full shadow-md overflow-hidden h-0 opacity-0 fixed top-[72px] left-0 z-40"
+        className="md:hidden fixed top-16 left-0 w-full bg-base-100 shadow-lg overflow-hidden h-0 opacity-0 z-40 border-t border-base-200"
       >
-        <ul className="flex flex-col gap-6 font-inter text-gray-700 p-6">
-          {NavLink.map((link, index) => (
-            <Link href={link.href} key={index}>
-              <li className="hover:text-blue-600 cursor-pointer">
+        <ul className="flex flex-col p-6 gap-5 text-base-content font-medium">
+          {links.map((link) => (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                className="block py-3 hover:text-primary transition-colors"
+                onClick={() => {
+                  setMobileOpen(false);
+                  if (link.name === "Logout") handleLogout();
+                }}
+              >
                 {link.name}
-              </li>
-            </Link>
+              </Link>
+            </li>
           ))}
 
-          <button className="bg-blue-500 text-white w-full px-5 py-2 rounded-lg font-poppins shadow hover:bg-blue-700 transition">
-            Join ETB
-          </button>
+          {!isAuthenticated && (
+            <Link href="/auth/register" onClick={() => setMobileOpen(false)}>
+              <button className="btn btn-primary w-full mt-4">
+                Join the Club
+              </button>
+            </Link>
+          )}
         </ul>
       </div>
+
+      {/* Spacer to prevent content overlap */}
+      <div className="h-16" />
     </>
   );
 }

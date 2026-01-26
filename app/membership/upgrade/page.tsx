@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { toast } from "sonner"
 import {
   Card,
   CardContent,
@@ -47,6 +48,7 @@ export default function MembershipUpgradePage() {
         setMembershipStatus(data.member.membershipStatus);
       } catch (err: any) {
         setError(err.message || "Something went wrong.");
+        toast.error(err.message || "Something went wrong.");
       } finally {
         setLoading(false);
       }
@@ -56,7 +58,7 @@ export default function MembershipUpgradePage() {
   }, [router]);
 
   const handleFakePayment = () => {
-    alert(
+    toast.info(
       "In real app this would start MTN MoMo payment flow.\n\nFor now: membership activated (mock)."
     );
     setMembershipStatus("active");

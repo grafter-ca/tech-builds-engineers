@@ -44,10 +44,10 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 }
 
 // PATCH /api/projects/:id - Update project (creator or admin)
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { userId, role } = await getUserContext(req);
-    const projectId = Number(params.id);
+    const projectId = Number((await params).id);
 
     const project = await prisma.project.findUnique({
       where: { project_id: projectId },

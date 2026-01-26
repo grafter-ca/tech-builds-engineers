@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Mail } from "lucide-react";
+import { Loader2} from "lucide-react";
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
@@ -52,7 +52,6 @@ export default function ForgotPasswordPage() {
           <div>
             <label className="text-sm font-medium text-gray-600 block mb-1">Email</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
               <input
                 type="email"
                 required

@@ -13,12 +13,10 @@ export default function Home() {
   return (
     <>
       <NavBar />
-
       {/* Hero Section */}
       <AnimatedSection className="min-h-screen flex items-center">
         <Hero />
       </AnimatedSection>
-
       {/* About Section */}
       <AnimatedSection className="py-20">
         <About />

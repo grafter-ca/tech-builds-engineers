@@ -1,9 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect } from "react";
 import gsap from "gsap";
-
 export default function NotFound() {
   useEffect(() => {
     gsap.from(".not-title", { opacity: 0, y: -20, duration: 0.6 });
@@ -19,12 +17,14 @@ export default function NotFound() {
         Oops! The page you are looking for doesn't exist or was moved.
       </p>
 
-      <Link
-        href="/"
+      <div
+       aria-label="Back to Home"
+       role="button"
+       onClick={() => (window.location.href = "/")}
         className="not-btn px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow hover:bg-blue-700 transition-all"
       >
         Back to Home
-      </Link>
+      </div>
     </main>
   );
 }

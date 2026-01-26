@@ -34,9 +34,9 @@ async function getCreatorOrAdminContext(req: NextRequest, projectId: number) {
 }
 
 // POST /api/projects/:id/members - Add member to project
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const projectId = Number(params.id);
+    const projectId = Number((await params).id);
     if (isNaN(projectId)) return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
 
     await getCreatorOrAdminContext(req, projectId);
@@ -74,10 +74,10 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
 }
 
 // DELETE /api/projects/:id/members/:userId - Remove member
-export async function DELETE(req: NextRequest, { params }: { params: { id: string; userId: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string, userId: string }> }) {
   try {
-    const projectId = Number(params.id);
-    const targetUserId = Number(params.userId);
+    const projectId = Number((await params).id);
+    const targetUserId = Number((await params).userId);
 
     if (isNaN(projectId) || isNaN(targetUserId)) {
       return NextResponse.json({ error: "Invalid IDs" }, { status: 400 });

@@ -60,3 +60,15 @@ export interface TeamMember {
     github?: string;
   };
 }
+
+/* ---------------- Reusable Input ---------------- */
+
+export interface InputFieldProps {
+  label: string;
+  icon: React.ReactNode;
+  type?: string;
+  placeholder: string;
+  value: string;
+  autoComplete?: string;
+  onChange: (value: string) => void;
+}

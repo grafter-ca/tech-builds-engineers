@@ -4,9 +4,10 @@ import React, { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Loader2, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 
-import {publicLinks,memberLinks,adminLinks} from '@/constants'
+import { publicLinks, memberLinks, adminLinks } from "@/constants";
+import Button from "../buttons/JoinCTA";
 
 // ───────────────────────────────────────────────
 // Auth hook (using your localStorage token)
@@ -46,7 +47,7 @@ export default function Navbar() {
       gsap.fromTo(
         navRef.current,
         { opacity: 0, y: -40 },
-        { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
+        { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
       );
     }
   }, []);
@@ -83,7 +84,7 @@ export default function Navbar() {
       {/* Sticky Navbar */}
       <nav
         ref={navRef}
-        className="fixed top-0 left-0 w-full z-50 bg-base-100 shadow-md border-b border-base-200 px-6 md:px-12 py-4 flex justify-between items-center"
+        className="fixed top-0 left-0 w-full z-50 bg-white shadow-md border-b border-base-200 px-6 md:px-12 py-4 flex justify-between items-center"
       >
         {/* Logo */}
         <Link href="/" className="flex gap-1 flex-col">
@@ -116,9 +117,10 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-4">
           {!isAuthenticated ? (
             <Link href="/auth/register">
-              <button className="btn btn-primary btn-sm rounded-full px-6">
-                Join the Club
-              </button>
+              <Button
+                label="Join the Club"
+                variant="primary"
+              />
             </Link>
           ) : (
             <button
@@ -136,11 +138,26 @@ export default function Navbar() {
           onClick={() => setMobileOpen(!mobileOpen)}
           className="md:hidden btn btn-ghost btn-circle"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             {mobileOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
             )}
           </svg>
         </button>
@@ -149,7 +166,7 @@ export default function Navbar() {
       {/* Mobile Menu Dropdown */}
       <div
         ref={mobileMenuRef}
-        className="md:hidden fixed top-16 left-0 w-full bg-base-100 shadow-lg overflow-hidden h-0 opacity-0 z-40 border-t border-base-200"
+        className="md:hidden fixed top-16 left-0 w-full bg-white shadow-lg overflow-hidden h-0 opacity-0 z-40 border-t border-base-200"
       >
         <ul className="flex flex-col p-6 gap-5 text-base-content font-medium">
           {links.map((link) => (
@@ -168,15 +185,17 @@ export default function Navbar() {
           ))}
 
           {!isAuthenticated && (
-            <Link href="/auth/register" onClick={() => setMobileOpen(false)}>
-              <button className="btn btn-primary w-full mt-4">
-                Join the Club
-              </button>
+            <Link href="/auth/register">
+              <Button
+                label="Join the Club"
+                variant="secondary"
+                onClick={() => setMobileOpen(false)}
+                className="bg-blue-600"
+              />
             </Link>
           )}
         </ul>
       </div>
-
       {/* Spacer to prevent content overlap */}
       <div className="h-16" />
     </>

@@ -2,7 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, User, Mail, Lock, GraduationCap, Building2 } from "lucide-react";
+import {
+  Loader2,
+  User,
+  Mail,
+  Lock,
+} from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -11,6 +16,7 @@ export default function RegisterPage() {
     fullName: "",
     email: "",
     password: "",
+    confirmPassword: "",
     studentId: "",
     department: "",
     yearOfStudy: "",
@@ -24,9 +30,14 @@ export default function RegisterPage() {
     if (loading) return;
 
     setError(null);
-    setLoading(true);
+
+    if (form.password !== form.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
 
     try {
+      setLoading(true);
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -34,15 +45,12 @@ export default function RegisterPage() {
       });
 
       const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || "Registration failed");
-      }
+      if (!res.ok) throw new Error(data.error || "Registration failed");
 
       alert("Registration successful! Check your email to verify your account.");
       router.push("/auth/login");
     } catch (err: any) {
-      setError(err.message || "Something went wrong during registration");
+      setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -50,105 +58,99 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-indigo-50 to-blue-100 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
-        <h1 className="text-2xl font-bold text-center text-gray-800">
-          Join Engineering Tech Builders Club
-        </h1>
-        <p className="text-gray-500 text-center mt-1">
-          Create your account and start building with us
-        </p>
+      <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl p-8 sm:p-10">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-bold text-gray-800">
+            Join Engineering Tech Builders Club
+          </h1>
+          <p className="text-gray-500 mt-2 text-sm">
+            Create your account and start building with us
+          </p>
+        </div>
 
-        <form onSubmit={submit} className="mt-8 space-y-6">
+        {/* Form */}
+        <form onSubmit={submit} className="space-y-6">
           {/* Full Name */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-            <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <input
-                type="text"
-                required
-                value={form.fullName}
-                onChange={(e) => setForm({ ...form, fullName: e.target.value })}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                placeholder="Caleb Habyarimana"
-              />
-            </div>
-          </div>
+          <InputField
+            label="Full Name"
+            icon={<User />}
+            placeholder="John Doe"
+            value={form.fullName}
+            onChange={(v) => setForm({ ...form, fullName: v })}
+          />
 
           {/* Email */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <input
-                type="email"
-                required
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                placeholder="your.email@gmail.com"
-              />
-            </div>
-          </div>
+          <InputField
+            label="Email"
+            type="email"
+            icon={<Mail />}
+            placeholder="your.email@gmail.com"
+            value={form.email}
+            onChange={(v) => setForm({ ...form, email: v })}
+          />
 
-          {/* Password */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <input
-                type="password"
-                required
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                placeholder="••••••••"
-              />
-            </div>
-          </div>
-
-          {/* Optional fields */}
+          {/* Passwords */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Student ID (optional)</label>
-              <input
-                type="text"
-                value={form.studentId}
-                onChange={(e) => setForm({ ...form, studentId: e.target.value })}
-                className="w-full py-3 border border-gray-300 rounded-xl px-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                placeholder="e.g. 221000123"
-              />
-            </div>
+            <InputField
+              label="Password"
+              type="password"
+              icon={<Lock />}
+              placeholder="••••••••"
+              value={form.password}
+              onChange={(v) => setForm({ ...form, password: v })}
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Department (optional)</label>
-              <input
-                type="text"
-                value={form.department}
-                onChange={(e) => setForm({ ...form, department: e.target.value })}
-                className="w-full py-3 border border-gray-300 rounded-xl px-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                placeholder="e.g. Computer Engineering"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Year of Study (optional)</label>
-            <input
-              type="text"
-              value={form.yearOfStudy}
-              onChange={(e) => setForm({ ...form, yearOfStudy: e.target.value })}
-              className="w-full py-3 border border-gray-300 rounded-xl px-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-              placeholder="e.g. Year 3"
+            <InputField
+              label="Confirm Password"
+              type="password"
+              icon={<Lock />}
+              placeholder="••••••••"
+              value={form.confirmPassword}
+              onChange={(v) => setForm({ ...form, confirmPassword: v })}
             />
           </div>
 
+          {/* Optional Section */}
+          <div className="pt-4 border-t border-gray-200">
+            <p className="text-sm text-gray-500 mb-4">
+              Optional academic details
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <TextInput
+                label="Student ID"
+                placeholder="e.g. 221000123"
+                value={form.studentId}
+                onChange={(v) => setForm({ ...form, studentId: v })}
+              />
+
+              <TextInput
+                label="Department"
+                placeholder="e.g. Computer Engineering"
+                value={form.department}
+                onChange={(v) => setForm({ ...form, department: v })}
+              />
+            </div>
+
+            <div className="mt-4">
+              <TextInput
+                label="Year of Study"
+                placeholder="e.g. Year 3"
+                value={form.yearOfStudy}
+                onChange={(v) => setForm({ ...form, yearOfStudy: v })}
+              />
+            </div>
+          </div>
+
+          {/* Error */}
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 text-sm p-3 rounded-lg">
               {error}
             </div>
           )}
 
+          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
@@ -159,6 +161,7 @@ export default function RegisterPage() {
           </button>
         </form>
 
+        {/* Footer */}
         <p className="mt-6 text-center text-sm text-gray-600">
           Already have an account?{" "}
           <button
@@ -169,6 +172,68 @@ export default function RegisterPage() {
           </button>
         </p>
       </div>
+    </div>
+  );
+}
+
+/* ---------------- Reusable Inputs ---------------- */
+
+function InputField({
+  label,
+  type = "text",
+  placeholder,
+  value,
+  onChange,
+}: {
+  label: string;
+  icon: React.ReactNode;
+  type?: string;
+  placeholder: string;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        {label}
+      </label>
+      <div>
+        <input
+          type={type}
+          required
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+        />
+      </div>
+    </div>
+  );
+}
+
+function TextInput({
+  label,
+  placeholder,
+  value,
+  onChange,
+}: {
+  label: string;
+  placeholder: string;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        {label}
+      </label>
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+      />
     </div>
   );
 }

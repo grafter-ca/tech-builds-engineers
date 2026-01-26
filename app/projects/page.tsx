@@ -8,7 +8,9 @@ export default function ProjectsPage() {
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "completed" | "pending">("all");
+  const [statusFilter, setStatusFilter] = useState<
+    "all" | "active" | "completed" | "pending"
+  >("all");
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -27,9 +29,10 @@ export default function ProjectsPage() {
   }, []);
 
   const filteredProjects = projects
-    .filter((p) =>
-      p.title.toLowerCase().includes(query.toLowerCase()) ||
-      p.description.toLowerCase().includes(query.toLowerCase())
+    .filter(
+      (p) =>
+        p.title.toLowerCase().includes(query.toLowerCase()) ||
+        p.description.toLowerCase().includes(query.toLowerCase()),
     )
     .filter((p) => (statusFilter === "all" ? true : p.status === statusFilter));
 
@@ -44,12 +47,12 @@ export default function ProjectsPage() {
   return (
     <div className="min-h-screen bg-base-200 p-6 md:p-10">
       <div className="max-w-7xl mx-auto space-y-6">
-
         {/* HERO */}
         <div className="bg-base-100 rounded-2xl shadow p-6">
           <h1 className="text-4xl font-bold">Projects Showcase</h1>
           <p className="text-lg text-base-content/70 mt-2">
-            Discover what the Engineering Tech Builders Club members are creating
+            Discover what the Engineering Tech Builders Club members are
+            creating
           </p>
 
           {/* SEARCH + FILTER */}
@@ -64,27 +67,27 @@ export default function ProjectsPage() {
               />
             </div>
 
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-6 flex-wrap">
               <button
-                className={`btn btn-sm ${statusFilter === "all" ? "btn-primary" : "btn-outline"}`}
+                className={`btn btn-sm px-4 py-0.5 border-2 border-gray-100 rounded-xl hover:bg-gray-400 hover:text-white transition duration-800 ease-in-out  ${statusFilter === "all" ? "btn-primary" : "btn-outline"}`}
                 onClick={() => setStatusFilter("all")}
               >
                 All
               </button>
               <button
-                className={`btn btn-sm ${statusFilter === "active" ? "btn-primary" : "btn-outline"}`}
+                className={`btn btn-sm px-2 py-0.75 border-2 border-gray-100 rounded-xl hover:bg-gray-400 hover:text-white transition duration-300 ease-in-out  ${statusFilter === "active" ? "btn-primary" : "btn-outline"}`}
                 onClick={() => setStatusFilter("active")}
               >
                 Active
               </button>
               <button
-                className={`btn btn-sm ${statusFilter === "completed" ? "btn-primary" : "btn-outline"}`}
+                className={`btn btn-sm px-2 py-0.75 border-2 border-gray-100 rounded-xl hover:bg-gray-400 hover:text-white transition duration-300 ease-in-out  ${statusFilter === "completed" ? "btn-primary" : "btn-outline"}`}
                 onClick={() => setStatusFilter("completed")}
               >
                 Completed
               </button>
               <button
-                className={`btn btn-sm ${statusFilter === "pending" ? "btn-primary" : "btn-outline"}`}
+                className={`btn btn-sm px-2 py-0.75 border-2 border-gray-100 rounded-xl hover:bg-gray-400 hover:text-white transition duration-300 ease-in-out  ${statusFilter === "pending" ? "btn-primary" : "btn-outline"}`}
                 onClick={() => setStatusFilter("pending")}
               >
                 Pending
@@ -132,7 +135,7 @@ export default function ProjectsPage() {
 
                     <Link
                       href={`/projects/${proj.project_id}`}
-                      className="btn btn-sm btn-outline gap-2"
+                      className="btn btn-sm  btn-outline gap-2"
                     >
                       View Project <ArrowRight size={16} />
                     </Link>
@@ -142,7 +145,6 @@ export default function ProjectsPage() {
             ))}
           </div>
         )}
-
       </div>
     </div>
   );

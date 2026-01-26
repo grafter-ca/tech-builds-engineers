@@ -4,11 +4,14 @@ import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { hero_image } from "@/constants";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import Button from "@/components/buttons/JoinCTA";
 
 const Hero = () => {
   const heroRef = useRef(null);
   const textRef = useRef(null);
   const imageRef = useRef<(HTMLImageElement | null)[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     // Text animation
@@ -60,16 +63,24 @@ const Hero = () => {
           <span>Web Development</span>
         </p>
 
-        {/* Buttons */}
-        <div className="flex gap-6 mt-16">
-          <button className="bg-blue-500 hover:bg-blue-800 text-white px-6 py-3 rounded-lg font-medium shadow-md transition">
-            Start Learning
-          </button>
+       {/* Buttons Container */}
+<div className="flex flex-col sm:flex-row gap-4 mt-10">
+  <Button 
+    variant="primary" 
+    type="button"
+    onClick={() => router.push('/courses')}
+    className="w-full sm:w-auto" // Mobile full-width, desktop auto
+    label="Start Learning"
+  />
 
-          <button className="border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-6 py-3 rounded-lg font-medium shadow-md transition">
-            Join the Club
-          </button>
-        </div>
+   <Button
+    variant="outline" 
+    type="button"
+    onClick={() => router.push('/register')}
+    className="w-full sm:w-auto"
+    label="Join the Club"
+  />
+  </div>
       </article>
 
       {/* RIGHT — Floating Images */}

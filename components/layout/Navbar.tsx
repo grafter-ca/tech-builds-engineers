@@ -166,7 +166,7 @@ export default function Navbar() {
       {/* Mobile Menu Dropdown */}
       <div
         ref={mobileMenuRef}
-        className="md:hidden fixed top-16 left-0 w-full bg-white shadow-lg overflow-hidden h-0 opacity-0 z-40 border-t border-base-200"
+        className="md:hidden fixed top-16 left-0 w-full bg-white shadow-lg overflow-hidden h-0 opacity-0 z-40 border-t border-base-200 pt-4"
       >
         <ul className="flex flex-col p-6 gap-5 text-base-content font-medium">
           {links.map((link) => (
@@ -188,9 +188,8 @@ export default function Navbar() {
             <Link href="/auth/register">
               <Button
                 label="Join the Club"
-                variant="secondary"
+                variant="primary"
                 onClick={() => setMobileOpen(false)}
-                className="bg-blue-600"
               />
             </Link>
           )}
